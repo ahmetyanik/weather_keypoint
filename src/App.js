@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import Loginpage from "./components/Loginpage";
+import Weatherpage from "./components/Weatherpage";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+  const [loginPass, setLoginPass] = useState(null);
+
+  const logInControl = () => {
+    localStorage.getItem("keypointToken") ? setLoginPass(true) : setLoginPass(null);
+  };
+
+  const logOut = () => {
+    localStorage.removeItem("keypointToken");
+    setLoginPass(false);
+  };
+
+  useEffect(() => {
+    logInControl();
+  }, [loginPass]);
+
+
+  return <div className="App">{loginPass ? <Weatherpage logOut={logOut}/> : <Loginpage loginPass={loginPass} setLoginPass={setLoginPass}  />}</div>;
 }
 
 export default App;
